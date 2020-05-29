@@ -36,7 +36,8 @@ namespace Graded_Unit
 
         struct sprite2d
         {
-            public Texture2D image;
+            public Texture2D imageL;
+            public Texture2D imageR;
             public Vector2 origin;
             public Vector3 position;
             public Rectangle rect;
@@ -44,6 +45,9 @@ namespace Graded_Unit
             public string direction; //decides which version of the character will be drawn, if he is facing forward, backwards or to the side
             public BoundingBox bbox;
             public bool moving; // Decides whether the character will be drawn as a PNG or a Gif (basically if they are moving or not)
+            public string foot; //decides which foot is being put forward, used to create the illusion of animation
+
+
         }
 
         struct interactable
@@ -64,11 +68,12 @@ namespace Graded_Unit
             public int size;
             public Rectangle rect;
             public string[] preview; // the preview text for the information given
-            public string[] information; // the information text itself
+            public string[] information1; // the information text itself
+            public string[] information2;  // If the information text is too long for a single line, draw a second one.
             public string[] answer;
             public string levelOption; // the level names
-            public Vector2 textposition;
-            public BoundingBox bbox;
+            public Vector2 textposition; // where the text position lies
+            public Vector2 textposition2; // If a second line is needed
         }
 
         //global or overlapping variables
@@ -101,8 +106,10 @@ namespace Graded_Unit
         int extra; //I will be keeping all questions and information in 1 big array, and will find them using this. IE stirling is questions 0-4, therefore extra = 0 for stirling.
         float timesince; //keeps track of the time since a chosen answer, done to stop someone accidentally clicking a wrong answer
         float timechosen = 0; //Variable that tracks the time at which an answer was chosen.
+        float timesincestep = 0; // Controls the time since last being told the controls
         float timechosenwrong; //time since a wrong answer was chosen, done to provide hint messages. 
         int current_hint; //keeps track of which interactable is being used
+        int track = 0;
 
         //variables to be used in the exploration section
 
@@ -143,7 +150,8 @@ namespace Graded_Unit
             background.rect.X = 0;
             background.rect.Y = ((displayheight - background.rect.Height) / 2);
 
-            character.image = Content.Load<Texture2D>("Placeholder player");
+            character.imageL = Content.Load<Texture2D>("PlayerL");
+            character.imageR = Content.Load<Texture2D>("PlayerR");
             character.rect.Height = displayheight / 10;
             character.rect.Width = displaywidth / 20;
 
@@ -154,11 +162,12 @@ namespace Graded_Unit
             option_A.position.Y = displayheight - 500;
             option_A.position.X = 0;
             option_A.levelOption = "Stirling";
-            option_A.textposition.X = option_A.position.X + 50;
+            option_A.textposition.X = option_A.position.X + 30;
             option_A.textposition.Y = option_A.position.Y + 50;
             option_A.preview = new string[15];
             option_A.answer = new string[15];
-            option_A.information = new string[15];
+            option_A.information1 = new string[5];
+            option_A.information2 = new string[5];
 
             option_B.UI = Content.Load<Texture2D>("Text_Box");
             option_B.rect.Height = displayheight / 3;
@@ -166,11 +175,12 @@ namespace Graded_Unit
             option_B.position.Y = displayheight - 500;
             option_B.position.X = displaywidth / 3;
             option_B.levelOption = "Edinburgh";
-            option_B.textposition.X = option_B.position.X + 50;
+            option_B.textposition.X = option_B.position.X + 30;
             option_B.textposition.Y = option_B.position.Y + 50;
             option_B.preview = new string[15];
             option_B.answer = new string[15];
-            option_B.information = new string[15];
+            option_B.information1 = new string[5];
+            option_B.information2 = new string[5];
 
             option_C.UI = Content.Load<Texture2D>("Text_Box");
             option_C.rect.Height = displayheight / 3;
@@ -178,12 +188,12 @@ namespace Graded_Unit
             option_C.position.Y = displayheight - 500;
             option_C.position.X = displaywidth / 3 * 2;
             option_C.levelOption = "Loch Ness";
-            option_C.textposition.X = option_C.position.X + 50;
+            option_C.textposition.X = option_C.position.X + 30;
             option_C.textposition.Y = option_C.position.Y + 50;
-            option_C.bbox = new BoundingBox(new Vector3(option_C.position.X, option_C.position.Y, 0), new Vector3(displaywidth, displayheight, 0));
             option_C.preview = new string[15];
             option_C.answer = new string[15];
-            option_C.information = new string[15];
+            option_C.information1 = new string[5];
+            option_C.information2 = new string[5];
 
 
             question_box.UI = Content.Load<Texture2D>("Text_Box");
@@ -192,8 +202,10 @@ namespace Graded_Unit
             question_box.position.Y = -displayheight + 1080;
             question_box.position.X = 0;
             question_box.levelOption = "Left Click to select a level";
-            question_box.textposition.X = question_box.position.X + 300;
+            question_box.textposition.X = question_box.position.X + 75;
             question_box.textposition.Y = displayheight - 1000;
+            question_box.textposition2.X = question_box.position.X + 75;
+            question_box.textposition2.Y = displayheight - 900;
             question_box.preview = new string[15];
 
             stats();
@@ -242,13 +254,15 @@ namespace Graded_Unit
             gameover = false;
             lives = 3;
             score = 0;
+            character.foot = "Left";
+            timesincestep = 0;
         }
 
         void Question_Load() //A seperate thing for inputting all the text for the questions, because its easier to manage from here than from the initialisation
         {
             //Stirling Questions
             option_A.answer[0] = "William Wallace";
-            option_B.answer[0] = "Sir Andrew Moray and William Wallace";
+            option_B.answer[0] = "Andy Moray & William Wallace";
             option_C.answer[0] = "Robert The Bruce";
             questions[0] = "Who commanded scottish forces at the battle of stirling bridge";
             correct_answers[0] = "B";
@@ -288,32 +302,32 @@ namespace Graded_Unit
             option_B.answer[6] = "To scare ducks";
             option_C.answer[6] = "To signal the time to dock workers";
             questions[6] = "Why did the tradition of the one oclock gun start?";
-            correct_answers[4] = "C";
+            correct_answers[6] = "C";
 
             option_A.answer[7] = "Glasgow";
             option_B.answer[7] = "Dunfermline";
             option_C.answer[7] = "Dundee";
             questions[7] = "What city was the capital of Scotland before Edinburgh?";
-            correct_answers[4] = "B";
+            correct_answers[7] = "B";
 
             option_A.answer[8] = "Robert the Bruce";
             option_B.answer[8] = "Mary Queen of Scots";
             option_C.answer[8] = "James the 6th";
             questions[8] = "Who was the first monarch of both Scotland and England?";
-            correct_answers[4] = "C";
+            correct_answers[8] = "C";
 
             option_A.answer[9] = "Placeholder Edinburgh";
             option_B.answer[9] = "Placeholder Edinburgh";
             option_C.answer[9] = "Placeholder Edinburgh";
             questions[9] = "Placeholder Stirling";
-            correct_answers[4] = "A";
+            correct_answers[9] = "A";
 
             //Loch Ness Questions
             option_A.answer[10] = "Placeholder Loch";
             option_B.answer[10] = "Placeholder Loch";
             option_C.answer[10] = "Placeholder Loch";
             questions[10] = "Placeholder Loch";
-            correct_answers[4] = "A";
+            correct_answers[10] = "A";
 
 
             option_A.answer[11] = "Placeholder Loch";
@@ -336,19 +350,25 @@ namespace Graded_Unit
             option_C.answer[14] = "Placeholder Loch";
             questions[14] = "Placeholder Stirling";
 
-            option_A.preview[0] = "William Wallace";
-            option_A.information[0] = "Something Something William Wallace";
+            option_A.preview[0] = "Stirling Bridge";
+            option_A.information1[0] = "While the English held control over most of the country, there were rebellions";
+            option_A.information2[0] = "Such as when William Wallace and Andy Moray defeated the english at Stirling bridge";
             option_B.preview[0] = "Robert the bruce";
-            option_B.information[0] = "Something Something Robert the Bruce";
+            option_B.information1[0] = "When Robert the Bruce sieged Stirling Castle in 1314 Edward II came to stop him.";
+            option_B.information2[0] = "Through good training and smart tactics Robert crushed the english army";
             option_C.preview[0] = "John Baliol";
-            option_C.information[0] = "Something Something John Baliol";
+            option_C.information1[0] = "When the king of Scotland died without children, Edward of England chose the new king";
+            option_C.information2[0] = "The king he chose was John Baliol, who he judged as having the best claim to the crown";
 
             option_A.preview[1] = "Scots Guard";
-            option_A.information[1] = "Something Something Scots Guard";
+            option_A.information1[1] = "Charles I originally formed the scots guard as his own personal bodyguard";
+            option_A.information2[1] = "It has since joined the British army, and become a famed infantry regiment";
             option_B.preview[1] = "WW1";
-            option_B.information[1] = "Something Something Trench Warfare";
-            option_C.preview[1] = "NA";
-            option_C.information[1] = "What would you like to learn about?";
+            option_B.information1[1] = "World war 1 was a brutal conflict for all involved, but especially the british army";
+            option_B.information2[1] = "Kilts looking like skirts caused the Germans to call scottish soldiers ladies from hell";
+            option_C.preview[1] = "N/A";
+            option_C.information1[1] = "What would you like to learn about?";
+            option_C.information2[1] = "";
 
 
 
@@ -396,6 +416,7 @@ namespace Graded_Unit
                         level = "Stirling";
                         mode = "Exploration";
                         extra = 0;
+                        level_start();
                         timechosenwrong = -5; //done to ensure that the message informing the player to look for hints doesnt pop up instantly upon entering a level
                     }
 
@@ -404,6 +425,7 @@ namespace Graded_Unit
                         level = "Edinburgh";
                         mode = "Exploration";
                         extra = 5;
+                        level_start();
                         timechosenwrong = -5;
                     }
 
@@ -412,6 +434,7 @@ namespace Graded_Unit
                         level = "Loch";
                         mode = "Exploration";
                         extra = 10;
+                        level_start();
                         timechosenwrong = -5;
                     }
 
@@ -421,16 +444,27 @@ namespace Graded_Unit
 
                 if (mode == "Exploration")
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.W)) { character.position.Y -= 5; character.direction = "up"; }
-                    if (Keyboard.GetState().IsKeyDown(Keys.S)) { character.position.Y += 5; character.direction = "down"; }
-                    if (Keyboard.GetState().IsKeyDown(Keys.A)) { character.position.X -= 5; character.direction = "left"; }
-                    if (Keyboard.GetState().IsKeyDown(Keys.D)) { character.position.X += 5; character.direction = "right"; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.W)) { character.position.Y -= 5; character.direction = "up"; character.moving = true; }
+                    else if (Keyboard.GetState().IsKeyDown(Keys.S)) { character.position.Y += 5; character.direction = "down"; character.moving = true; }
+                    else if (Keyboard.GetState().IsKeyDown(Keys.A)) { character.position.X -= 5; character.direction = "left"; character.moving = true; }
+                    else if (Keyboard.GetState().IsKeyDown(Keys.D)) { character.position.X += 5; character.direction = "right"; character.moving = true; }
+                    else { character.moving = false; }
 
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter)) { mode = "hints"; current_hint = 0; chosen = false; }
                     if (Keyboard.GetState().IsKeyDown(Keys.H)) { mode = "hints"; current_hint = 1; chosen = false; }
                     if (Keyboard.GetState().IsKeyDown(Keys.E)) { mode = "questions"; chosen = false; }
 
-                }
+
+                    if (character.moving == true)
+                    {
+                        if (track == 0) { character.foot = "Right"; }
+                        else if (track == 1) { character.foot = "Left"; }
+                        if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincestep >= 0.5) { track += 1; timesincestep = (float)gameTime.TotalGameTime.TotalSeconds; }
+                        if (track == 2) { track = 0; }
+                    }
+
+
+                }        
                 if (mode == "hints")
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Q))
@@ -531,17 +565,23 @@ namespace Graded_Unit
             {
                 if (mode == "Exploration")
                 {
+                    //draw each of the levels
                     if (level == "Stirling") { spriteBatch.Draw(background.stirling, background.rect, Color.White); }
                     if (level == "Edinburgh") { spriteBatch.Draw(background.edinburgh, background.rect, Color.White); }
                     if (level == "Loch") { spriteBatch.Draw(background.loch_ness, background.rect, Color.White); }
-                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) { spriteBatch.DrawString(font, "You were wrong, look for clues and try again", question_box.textposition, Color.White); }
+                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) { spriteBatch.DrawString(font, "You were wrong, look for clues and try again", question_box.textposition, Color.White); } // provide a hint message if a player answers a question wrong
+                    
 
-                    spriteBatch.Draw(character.image, character.rect, Color.White);
+                    if (character.foot == "Left") { spriteBatch.Draw(character.imageL, character.rect, Color.White); } //draw the character
+                    if (character.foot == "Right") { spriteBatch.Draw(character.imageR, character.rect, Color.White); }
+
+                    
                 }
 
 
                 if (mode == "level_select")
                 {
+                    //draw each of the text boxes
                     spriteBatch.Draw(option_A.UI, option_A.rect, Color.White);
                     spriteBatch.DrawString(font, option_A.levelOption, option_A.textposition, Color.White);
 
@@ -557,7 +597,7 @@ namespace Graded_Unit
 
                 if (mode == "hints")
                 {
-
+                    //draw the text boxes
                     spriteBatch.Draw(option_A.UI, option_A.rect, Color.White);
                     spriteBatch.DrawString(font, option_A.preview[current_hint], option_A.textposition, Color.White);
 
@@ -568,6 +608,8 @@ namespace Graded_Unit
                     spriteBatch.DrawString(font, option_C.preview[current_hint], option_C.textposition, Color.White);
 
                     spriteBatch.Draw(question_box.UI, question_box.rect, Color.White);
+
+                    //Drawing the right test within the information box
                     if (chosen == false)
                     {
                         spriteBatch.DrawString(font, question_box.preview[current_hint], question_box.textposition, Color.White);
@@ -575,23 +617,28 @@ namespace Graded_Unit
 
                     else if (chosen == true && current_answer == "A")
                     {
-                        spriteBatch.DrawString(font, option_A.information[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_A.information1[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_A.information2[current_hint], question_box.textposition2, Color.White);
 
                     }
 
                     else if (chosen == true && current_answer == "B")
                     {
-                        spriteBatch.DrawString(font, option_B.information[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_B.information1[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_B.information2[current_hint], question_box.textposition2, Color.White);
                     }
 
                     else if (chosen == true && current_answer == "C")
                     {
-                        spriteBatch.DrawString(font, option_C.information[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_C.information1[current_hint], question_box.textposition, Color.White);
+                        spriteBatch.DrawString(font, option_C.information2[current_hint], question_box.textposition2, Color.White);
                     }
 
                 }
                 if (mode == "questions")
                 {
+                    //drawing the answer boxes and question boxe
+                    
                     spriteBatch.Draw(option_A.UI, option_A.rect, Color.White);
                     spriteBatch.DrawString(font, option_A.answer[current_question], option_A.textposition, Color.White);
 
@@ -604,6 +651,8 @@ namespace Graded_Unit
                     spriteBatch.Draw(question_box.UI, question_box.rect, Color.White);
                     spriteBatch.DrawString(font, questions[current_question], question_box.textposition, Color.White);
                 }
+
+
             }
 
             if (gameover == true)
@@ -618,9 +667,6 @@ namespace Graded_Unit
                     spriteBatch.DrawString(font, "Sorry, you lost, press T to return to the level select", option_B.textposition, Color.White);
                 }
             }
-
-
-
             spriteBatch.End();
         }
     }
