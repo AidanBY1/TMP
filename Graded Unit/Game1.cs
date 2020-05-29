@@ -159,7 +159,7 @@ namespace Graded_Unit
             option_A.UI = Content.Load<Texture2D>("Text_Box");
             option_A.rect.Height = displayheight / 3;
             option_A.rect.Width = displaywidth / 3;
-            option_A.position.Y = displayheight - 500;
+            option_A.position.Y = displayheight /2;
             option_A.position.X = 0;
             option_A.levelOption = "Stirling";
             option_A.textposition.X = option_A.position.X + 30;
@@ -172,7 +172,7 @@ namespace Graded_Unit
             option_B.UI = Content.Load<Texture2D>("Text_Box");
             option_B.rect.Height = displayheight / 3;
             option_B.rect.Width = displaywidth / 3;
-            option_B.position.Y = displayheight - 500;
+            option_B.position.Y = displayheight/2;
             option_B.position.X = displaywidth / 3;
             option_B.levelOption = "Edinburgh";
             option_B.textposition.X = option_B.position.X + 30;
@@ -185,7 +185,7 @@ namespace Graded_Unit
             option_C.UI = Content.Load<Texture2D>("Text_Box");
             option_C.rect.Height = displayheight / 3;
             option_C.rect.Width = displaywidth / 3;
-            option_C.position.Y = displayheight - 500;
+            option_C.position.Y = displayheight/2;
             option_C.position.X = displaywidth / 3 * 2;
             option_C.levelOption = "Loch Ness";
             option_C.textposition.X = option_C.position.X + 30;
@@ -199,7 +199,7 @@ namespace Graded_Unit
             question_box.UI = Content.Load<Texture2D>("Text_Box");
             question_box.rect.Height = displayheight / 3;
             question_box.rect.Width = displaywidth;
-            question_box.position.Y = -displayheight + 1080;
+            question_box.position.Y = 0;
             question_box.position.X = 0;
             question_box.levelOption = "Left Click to select a level";
             question_box.textposition.X = question_box.position.X + 75;
@@ -254,7 +254,7 @@ namespace Graded_Unit
             gameover = false;
             lives = 3;
             score = 0;
-            character.foot = "Left";
+            character.foot = "Right";
             timesincestep = 0;
         }
 
