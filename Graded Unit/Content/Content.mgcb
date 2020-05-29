@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Edinburgh  Placeholder.png
+#begin Edinburgh Final(32x18).png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +23,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Edinburgh  Placeholder.png
+/build:Edinburgh Final(32x18).png
 
-#begin Loch Ness  Placeholder.jpg
+#begin Loch Ness Final(32x18).png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,7 +35,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Loch Ness  Placeholder.jpg
+/build:Loch Ness Final(32x18).png
 
 #begin Placeholder player.gif
 /importer:TextureImporter
@@ -49,7 +49,15 @@
 /processorParam:TextureFormat=Color
 /build:Placeholder player.gif
 
-#begin Placeholder.jpg
+#begin quartz4.png
+/importer:TextureImporter
+/processor:FontTextureProcessor
+/processorParam:FirstCharacter= 
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:quartz4.png
+
+#begin StirlingFinal(32x18).png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,15 +67,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Placeholder.jpg
-
-#begin quartz4.png
-/importer:TextureImporter
-/processor:FontTextureProcessor
-/processorParam:FirstCharacter= 
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Color
-/build:quartz4.png
+/build:StirlingFinal(32x18).png
 
 #begin sword.png
 /importer:TextureImporter

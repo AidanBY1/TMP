@@ -132,9 +132,9 @@ namespace Graded_Unit
 
             font = Content.Load<SpriteFont>("Quartz4");
 
-            background.stirling = Content.Load<Texture2D>("Placeholder");
-            background.edinburgh = Content.Load<Texture2D>("Edinburgh  Placeholder");
-            background.loch_ness = Content.Load<Texture2D>("Loch Ness  Placeholder");
+            background.stirling = Content.Load<Texture2D>("StirlingFinal(32x18)");
+            background.edinburgh = Content.Load<Texture2D>("Edinburgh Final(32x18)");
+            background.loch_ness = Content.Load<Texture2D>("Loch Ness Final(32x18)");
 
             float ratio = ((float)displaywidth / background.stirling.Width);
 
