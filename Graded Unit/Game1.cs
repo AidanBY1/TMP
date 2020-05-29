@@ -106,7 +106,8 @@ namespace Graded_Unit
         int extra; //I will be keeping all questions and information in 1 big array, and will find them using this. IE stirling is questions 0-4, therefore extra = 0 for stirling.
         float timesince; //keeps track of the time since a chosen answer, done to stop someone accidentally clicking a wrong answer
         float timechosen = 0; //Variable that tracks the time at which an answer was chosen.
-        float timesincestep = 0; // Controls the time since last being told the controls
+        float timesincestep = 0; //  the time since the player last took a step, used to control animation
+        float timesincecontrols; //time since the player was last given the controls
         float timechosenwrong; //time since a wrong answer was chosen, done to provide hint messages. 
         int current_hint; //keeps track of which interactable is being used
         int track = 0;
@@ -296,7 +297,7 @@ namespace Graded_Unit
             option_B.answer[5] = "Edinburgh Hill";
             option_C.answer[5] = "Ben Nevis";
             questions[5] = "What is the name of the hill that edinburgh castle is built on?";
-            correct_answers[5] = "C";
+            correct_answers[5] = "B";
 
             option_A.answer[6] = "To spend excess ammunition";
             option_B.answer[6] = "To scare ducks";
@@ -451,7 +452,8 @@ namespace Graded_Unit
                     else { character.moving = false; }
 
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter)) { mode = "hints"; current_hint = 0; chosen = false; }
-                    if (Keyboard.GetState().IsKeyDown(Keys.H)) { mode = "hints"; current_hint = 1; chosen = false; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.C)) { timesincecontrols = (float)gameTime.TotalGameTime.TotalSeconds; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.H)) { timechosenwrong = (float)gameTime.TotalGameTime.TotalSeconds; }
                     if (Keyboard.GetState().IsKeyDown(Keys.E)) { mode = "questions"; chosen = false; }
 
 
@@ -569,13 +571,19 @@ namespace Graded_Unit
                     if (level == "Stirling") { spriteBatch.Draw(background.stirling, background.rect, Color.White); }
                     if (level == "Edinburgh") { spriteBatch.Draw(background.edinburgh, background.rect, Color.White); }
                     if (level == "Loch") { spriteBatch.Draw(background.loch_ness, background.rect, Color.White); }
-                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) { spriteBatch.DrawString(font, "You were wrong, look for clues and try again", question_box.textposition, Color.White); } // provide a hint message if a player answers a question wrong
-                    
-
+                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) // provide a hint message to tell the player where to look for information
+                    { 
+                        if (current_question <= 2) { spriteBatch.DrawString(font, "That Knight looks interesting", question_box.textposition, Color.White); }
+                        if (current_question <= 4 && current_question >= 3) { spriteBatch.DrawString(font, "The Musket Display may have useful information", question_box.textposition, Color.White); }
+                        if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", question_box.textposition, Color.White); }
+                        if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The book looks like a good read", question_box.textposition, Color.White); }
+                        if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "Thats a really nice Sword", question_box.textposition, Color.White); }
+                        if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "That old camera may hold the answers", question_box.textposition, Color.White); }
+                    }
                     if (character.foot == "Left") { spriteBatch.Draw(character.imageL, character.rect, Color.White); } //draw the character
                     if (character.foot == "Right") { spriteBatch.Draw(character.imageR, character.rect, Color.White); }
+                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincecontrols <= 5) { spriteBatch.DrawString(font, "E for questions, Enter for information, WASD for movement, H for hints", new Vector2(displaywidth/20, displayheight *(float) 0.75), Color.White); }
 
-                    
                 }
 
 
