@@ -20,6 +20,7 @@ namespace Graded_Unit
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.IsFullScreen = true;
         }
 
 
@@ -53,8 +54,6 @@ namespace Graded_Unit
         struct interactable
         {
             public Texture2D imageobject;
-            public Vector3 position;
-            public Vector2 origin;
             public Rectangle rect;
             public float size;
             public BoundingBox bbox_interactable;
@@ -89,6 +88,13 @@ namespace Graded_Unit
         SpriteFont font;
         int score; //keeps track of what the number of right questions is, if it =5 then you win the level
 
+        //all interactables
+        interactable sword;
+        interactable knight;
+        interactable camera;
+        interactable crown;
+        interactable musket;
+        interactable book;
 
         // the text boxes that will be implemented. its easier to manage if there are several
         // text boxes A through C will be used for questions, interactables and level selection.
@@ -156,6 +162,64 @@ namespace Graded_Unit
             character.rect.Height = displayheight / 10;
             character.rect.Width = displaywidth / 20;
 
+
+            //all of the interactable information
+            book.imageobject = Content.Load<Texture2D>("Book");
+            book.size = 2;
+            book.rect.Width = book.imageobject.Width *(int) book.size;
+            book.rect.Height = book.imageobject.Height *(int) book.size;
+            book.rect.X = displaywidth / 10 * 7;
+            book.rect.Y = displayheight /12 * 11;
+            book.bbox_interactable.Min = new Vector3 (book.rect.X, book.rect.Y,0);
+            book.bbox_interactable.Max = new Vector3(book.rect.X + book.imageobject.Width, book.rect.Y + book.imageobject.Height, 0);
+
+            camera.imageobject = Content.Load<Texture2D>("Camera");
+            camera.size = 1;
+            camera.rect.Width = camera.imageobject.Width * (int)camera.size;
+            camera.rect.Height = camera.imageobject.Height * (int)camera.size;
+            camera.rect.X = displaywidth / 10 * 9;
+            camera.rect.Y = displayheight / 2;
+            camera.bbox_interactable.Min = new Vector3(camera.rect.X, camera.rect.Y, 0);
+            camera.bbox_interactable.Max = new Vector3(camera.rect.X + camera.imageobject.Width, camera.rect.Y + camera.imageobject.Height, 0);
+
+            crown.imageobject = Content.Load<Texture2D>("Crown");
+            crown.size = 2;
+            crown.rect.Width = crown.imageobject.Width * (int)crown.size ;
+            crown.rect.Height = crown.imageobject.Height * (int)crown.size;
+            crown.rect.X = displaywidth / 100 * 25;
+            crown.rect.Y = displayheight / 12 * 11;
+            crown.bbox_interactable.Min = new Vector3(crown.rect.X, crown.rect.Y, 0);
+            crown.bbox_interactable.Max = new Vector3(crown.rect.X + crown.imageobject.Width, crown.rect.Y + crown.imageobject.Height, 0);
+
+            knight.imageobject = Content.Load<Texture2D>("Knight");
+            knight.size = 1;
+            knight.rect.Width = knight.imageobject.Width * (int)knight.size;
+            knight.rect.Height = knight.imageobject.Height * (int)knight.size;
+            knight.rect.X = displaywidth/100;
+            knight.rect.Y = displayheight/5;
+            knight.bbox_interactable.Min = new Vector3(knight.rect.X, knight.rect.Y, 0);
+            knight.bbox_interactable.Max = new Vector3(knight.rect.X + knight.imageobject.Width, knight.rect.Y + knight.imageobject.Height, 0);
+
+            musket.imageobject = Content.Load<Texture2D>("Musket");
+            musket.size = 1;
+            musket.rect.Width = musket.imageobject.Width * (int)musket.size;
+            musket.rect.Height = musket.imageobject.Height * (int)musket.size;
+            musket.rect.X = displaywidth/10 * 9;
+            musket.rect.Y = displayheight/2;
+            musket.bbox_interactable.Min = new Vector3(musket.rect.X, musket.rect.Y, 0);
+            musket.bbox_interactable.Max = new Vector3(musket.rect.X + musket.imageobject.Width, musket.rect.Y + musket.imageobject.Height, 0);
+
+            sword.imageobject = Content.Load<Texture2D>("Sword");
+            sword.size = 1;
+            sword.rect.Width = sword.imageobject.Width * (int)sword.size;
+            sword.rect.Height = sword.imageobject.Height * (int)sword.size;
+            sword.rect.X = displaywidth / 2;
+            sword.rect.Y = displayheight / 2;
+            sword.bbox_interactable.Min = new Vector3(sword.rect.X, sword.rect.Y, 0);
+            sword.bbox_interactable.Max = new Vector3(sword.rect.X + sword.imageobject.Width, sword.rect.Y + sword.imageobject.Height, 0);
+
+
+
             //loading all the information for the text boxes
             option_A.UI = Content.Load<Texture2D>("Text_Box");
             option_A.rect.Height = displayheight / 3;
@@ -167,8 +231,8 @@ namespace Graded_Unit
             option_A.textposition.Y = option_A.position.Y + 50;
             option_A.preview = new string[15];
             option_A.answer = new string[15];
-            option_A.information1 = new string[5];
-            option_A.information2 = new string[5];
+            option_A.information1 = new string[6];
+            option_A.information2 = new string[6];
 
             option_B.UI = Content.Load<Texture2D>("Text_Box");
             option_B.rect.Height = displayheight / 3;
@@ -180,8 +244,8 @@ namespace Graded_Unit
             option_B.textposition.Y = option_B.position.Y + 50;
             option_B.preview = new string[15];
             option_B.answer = new string[15];
-            option_B.information1 = new string[5];
-            option_B.information2 = new string[5];
+            option_B.information1 = new string[6];
+            option_B.information2 = new string[6];
 
             option_C.UI = Content.Load<Texture2D>("Text_Box");
             option_C.rect.Height = displayheight / 3;
@@ -193,8 +257,8 @@ namespace Graded_Unit
             option_C.textposition.Y = option_C.position.Y + 50;
             option_C.preview = new string[15];
             option_C.answer = new string[15];
-            option_C.information1 = new string[5];
-            option_C.information2 = new string[5];
+            option_C.information1 = new string[6];
+            option_C.information2 = new string[6];
 
 
             question_box.UI = Content.Load<Texture2D>("Text_Box");
@@ -297,11 +361,11 @@ namespace Graded_Unit
             option_B.answer[5] = "Edinburgh Hill";
             option_C.answer[5] = "Ben Nevis";
             questions[5] = "What is the name of the hill that edinburgh castle is built on?";
-            correct_answers[5] = "B";
+            correct_answers[5] = "A";
 
             option_A.answer[6] = "To spend excess ammunition";
             option_B.answer[6] = "To scare ducks";
-            option_C.answer[6] = "To signal the time to dock workers";
+            option_C.answer[6] = "To signal the time";
             questions[6] = "Why did the tradition of the one oclock gun start?";
             correct_answers[6] = "C";
 
@@ -317,10 +381,10 @@ namespace Graded_Unit
             questions[8] = "Who was the first monarch of both Scotland and England?";
             correct_answers[8] = "C";
 
-            option_A.answer[9] = "Placeholder Edinburgh";
-            option_B.answer[9] = "Placeholder Edinburgh";
-            option_C.answer[9] = "Placeholder Edinburgh";
-            questions[9] = "Placeholder Stirling";
+            option_A.answer[9] = "The Crown, Sceptre and Sword";
+            option_B.answer[9] = "The Crown and Scottish Spear";
+            option_C.answer[9] = "Robert Bruces Sword/Crown";
+            questions[9] = "What are the Honours of Scotland";
             correct_answers[9] = "A";
 
             //Loch Ness Questions
@@ -334,23 +398,29 @@ namespace Graded_Unit
             option_A.answer[11] = "Placeholder Loch";
             option_B.answer[11] = "Placeholder Loch";
             option_C.answer[11] = "Placeholder Loch";
-            questions[11] = "Placeholder Stirling";
+            questions[11] = "Placeholder Loch";
+            correct_answers[11] = "A";
 
             option_A.answer[12] = "Placeholder Loch";
             option_B.answer[12] = "Placeholder Loch";
             option_C.answer[12] = "Placeholder Loch";
-            questions[12] = "Placeholder Stirling";
+            questions[12] = "Placeholder Loch";
+            correct_answers[12] = "A";
 
             option_A.answer[13] = "Placeholder Loch";
             option_B.answer[13] = "Placeholder Loch";
             option_C.answer[13] = "Placeholder Loch";
-            questions[13] = "Placeholder Stirling";
+            questions[13] = "Placeholder Loch";
+            correct_answers[13] = "A";
 
             option_A.answer[14] = "Placeholder Loch";
             option_B.answer[14] = "Placeholder Loch";
             option_C.answer[14] = "Placeholder Loch";
-            questions[14] = "Placeholder Stirling";
+            questions[14] = "Placeholder Loch";
+            correct_answers[14] = "A";
 
+
+            //The infromation for all of the interactables
             option_A.preview[0] = "Stirling Bridge";
             option_A.information1[0] = "While the English held control over most of the country, there were rebellions";
             option_A.information2[0] = "Such as when William Wallace and Andy Moray defeated the english at Stirling bridge";
@@ -371,8 +441,48 @@ namespace Graded_Unit
             option_C.information1[1] = "What would you like to learn about?";
             option_C.information2[1] = "";
 
+            option_A.preview[2] = "Edinburgh Castle";
+            option_A.information1[2] = "Edinburgh Castle is built upon the nearly 260 feet tall Castle Rock";
+            option_A.information2[2] = "There's only one way to reach the castle, which made it impossible to attack";
+            option_B.preview[2] = "One O'clock Gun";
+            option_B.information1[2] = "Before Portable watches it was difficult to tell when it was lunch time.";
+            option_B.information2[2] = "They Used a Cannon to signal 1'oclock as it could be easily heard over the noisy docks";
+            option_C.preview[2] = "Scotlands Capital";
+            option_C.information1[2] = "The Capital of Scotland has changed several times, always near the centre of Scotland";
+            option_C.information2[2] = "Before Edinburgh the capital was Dunfermline, Protected from the english by the Forth";
 
+            option_A.preview[3] = "First United King";
+            option_A.information1[3] = "Many english kings wanted to unite Scotland and England, attempting to conquer us";
+            option_A.information2[3] = "But when Elizabeth 1st died without a Son, the throne was united by king James 6th";
+            option_B.preview[3] = "The Crown Jewels";
+            option_B.information1[3] = "The Scottish Crown Jewels are named the honours of Scotland";
+            option_B.information2[3] = "They are the Scottish Crown, A sceptre and a sword both gifted by a pope";
+            option_C.preview[3] = "N/A";
+            option_C.information1[3] = "What would you like to learn about?";
+            option_C.information2[3] = "";
 
+            //Matthew put loch ness hints and information here. Preview is the hint message, Information 1 is the first line of information, Information 2 is the second
+            //Try and keep them at the length i have above, more or less, because if its too long it wont fit on the screen.
+
+            option_A.preview[4] = "";
+            option_A.information1[4] = "";
+            option_A.information2[4] = "";
+            option_B.preview[4] = "";
+            option_B.information1[4] = "";
+            option_B.information2[4] = "";
+            option_C.preview[4] = "";
+            option_C.information1[4] = "";
+            option_C.information2[4] = "";
+
+            option_A.preview[5] = "";
+            option_A.information1[5] = "";
+            option_A.information2[5] = "";
+            option_B.preview[5] = "";
+            option_B.information1[5] = "";
+            option_B.information2[5] = "";
+            option_C.preview[5] = "N/A";
+            option_C.information1[5] = "What would you like to learn about?";
+            option_C.information2[5] = "";
         }
 
 
@@ -445,18 +555,47 @@ namespace Graded_Unit
 
                 if (mode == "Exploration")
                 {
+                    //Movement and Bbox
                     if (Keyboard.GetState().IsKeyDown(Keys.W)) { character.position.Y -= 5; character.direction = "up"; character.moving = true; }
                     else if (Keyboard.GetState().IsKeyDown(Keys.S)) { character.position.Y += 5; character.direction = "down"; character.moving = true; }
                     else if (Keyboard.GetState().IsKeyDown(Keys.A)) { character.position.X -= 5; character.direction = "left"; character.moving = true; }
                     else if (Keyboard.GetState().IsKeyDown(Keys.D)) { character.position.X += 5; character.direction = "right"; character.moving = true; }
-                    else { character.moving = false; }
+                    else { character.moving = false; } //Sets up whether to track the movement loop
+                    character.bbox.Min = character.position;
+                    character.bbox.Max = new Vector3 (character.position.X + displaywidth/20, character.position.Y + displayheight/2, 0);
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.Enter)) { mode = "hints"; current_hint = 0; chosen = false; }
+
+                    //collision. For some reason displaywidth and height were just slightly offscreen on my moniter hence the  - /20 because otherwise you could walk slightly offscreen
+                    if (character.position.X > displaywidth - (displaywidth/20)) { character.position.X -= 5; }
+                    if (character.position.X < 0) { character.position.X += 5; }
+                    if (character.position.Y > displayheight - (displaywidth/20)) { character.position.Y -= 5; }
+                    if (character.position.Y < 0) { character.position.Y += 5; }
+
+                    //Sets up which interactables are present in each level and what information they give
+                    if (level == "Stirling")
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(knight.bbox_interactable)) { mode = "hints"; current_hint = 0; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(musket.bbox_interactable)) { mode = "hints"; current_hint = 1; chosen = false; }
+                    }
+
+                    if (level == "Edinburgh")
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(book.bbox_interactable)) { mode = "hints"; current_hint = 2; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(crown.bbox_interactable)) { mode = "hints"; current_hint = 3; chosen = false; }
+                    }
+
+                    if (level == "Loch")
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; }
+                    }
+
+                    //Shortcuts to get different information
                     if (Keyboard.GetState().IsKeyDown(Keys.C)) { timesincecontrols = (float)gameTime.TotalGameTime.TotalSeconds; }
                     if (Keyboard.GetState().IsKeyDown(Keys.H)) { timechosenwrong = (float)gameTime.TotalGameTime.TotalSeconds; }
                     if (Keyboard.GetState().IsKeyDown(Keys.E)) { mode = "questions"; chosen = false; }
 
-
+                    //Movement loop. Swaps between 1 and 2, left and right
                     if (character.moving == true)
                     {
                         if (track == 0) { character.foot = "Right"; }
@@ -466,13 +605,16 @@ namespace Graded_Unit
                     }
 
 
-                }        
+                }
+                
+
                 if (mode == "hints")
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Q))
                     {
-                        mode = "Exploration";
+                        mode = "Exploration"; //Key to escape
                     }
+                    //Sets up the question boxes to be pressed
                     if (option_A.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
                         chosen = true;
@@ -496,7 +638,7 @@ namespace Graded_Unit
 
                 if (mode == "questions")
                 {
-
+                    //Same code as the rest of the menus
                     if (Keyboard.GetState().IsKeyDown(Keys.Q))
                     {
                         mode = "Exploration";
@@ -524,28 +666,28 @@ namespace Graded_Unit
 
                         }
                     }
-
-                    if (chosen == true)
+                    //Right or Wrong Code
+                    if (chosen == true) //Only checks once you've chosen an answer
                     {
-                        if (current_answer == correct_answers[current_question])
+                        if (current_answer == correct_answers[current_question]) //If the answer is right move on to the next question
                         {
                             current_question += 1;
                             score += 1;
                             chosen = false;
-                            timechosen = (float)(gameTime.TotalGameTime.TotalSeconds);
+                            timechosen = (float)(gameTime.TotalGameTime.TotalSeconds); //Makes it so you cant accidentally click the wrong answer instantly after, theres a buffer to read the question
                         }
 
                         else if (current_answer != correct_answers[current_question])
                         {
                             lives -= 1;
                             chosen = false;
-                            mode = "Exploration";
-                            timechosenwrong = (float)(gameTime.TotalGameTime.TotalSeconds);
+                            mode = "Exploration"; 
+                            timechosenwrong = (float)(gameTime.TotalGameTime.TotalSeconds); //Once back in exploration it writes you a hint telling you where to look for information
                         }
 
                     }
                 }
-
+                //Win or lose code
                 if (score >= 5) { gameover = true; win = true; }
                 if (lives == 0) { gameover = true; }
             }
@@ -565,23 +707,44 @@ namespace Graded_Unit
             spriteBatch.Begin();
             if (gameover == false)
             {
+                
                 if (mode == "Exploration")
                 {
+                    
                     //draw each of the levels
-                    if (level == "Stirling") { spriteBatch.Draw(background.stirling, background.rect, Color.White); }
-                    if (level == "Edinburgh") { spriteBatch.Draw(background.edinburgh, background.rect, Color.White); }
-                    if (level == "Loch") { spriteBatch.Draw(background.loch_ness, background.rect, Color.White); }
+                    if (level == "Stirling")
+                    {
+                        spriteBatch.Draw(background.stirling, background.rect, Color.White);
+                        spriteBatch.Draw(knight.imageobject, knight.rect, Color.White);
+                        spriteBatch.Draw(musket.imageobject, musket.rect, Color.White);
+                    }
+                    if (level == "Edinburgh")
+                    {
+                        spriteBatch.Draw(background.edinburgh, background.rect, Color.White);
+                        spriteBatch.Draw(book.imageobject, book.rect, Color.White);
+                        spriteBatch.Draw(crown.imageobject, crown.rect, Color.White);
+
+                    }
+                    if (level == "Loch")
+                    {
+                        spriteBatch.Draw(background.loch_ness, background.rect, Color.White);
+                        spriteBatch.Draw(sword.imageobject, sword.rect, Color.White);
+                        spriteBatch.Draw(camera.imageobject, camera.rect, Color.White);
+                    }
+
+                    spriteBatch.DrawString(font, (lives.ToString() + " Lives"), new Vector2 (displaywidth/10 * 9, displayheight /20), Color.White);
                     if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) // provide a hint message to tell the player where to look for information
                     { 
                         if (current_question <= 2) { spriteBatch.DrawString(font, "That Knight looks interesting", question_box.textposition, Color.White); }
                         if (current_question <= 4 && current_question >= 3) { spriteBatch.DrawString(font, "The Musket Display may have useful information", question_box.textposition, Color.White); }
-                        if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", question_box.textposition, Color.White); }
-                        if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The book looks like a good read", question_box.textposition, Color.White); }
+                        if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The book looks like a good read", question_box.textposition, Color.White); }
+                        if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", question_box.textposition, Color.White); }
                         if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "Thats a really nice Sword", question_box.textposition, Color.White); }
                         if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "That old camera may hold the answers", question_box.textposition, Color.White); }
                     }
                     if (character.foot == "Left") { spriteBatch.Draw(character.imageL, character.rect, Color.White); } //draw the character
                     if (character.foot == "Right") { spriteBatch.Draw(character.imageR, character.rect, Color.White); }
+                    
                     if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincecontrols <= 5) { spriteBatch.DrawString(font, "E for questions, Enter for information, WASD for movement, H for hints", new Vector2(displaywidth/20, displayheight *(float) 0.75), Color.White); }
 
                 }
@@ -605,6 +768,7 @@ namespace Graded_Unit
 
                 if (mode == "hints")
                 {
+
                     //draw the text boxes
                     spriteBatch.Draw(option_A.UI, option_A.rect, Color.White);
                     spriteBatch.DrawString(font, option_A.preview[current_hint], option_A.textposition, Color.White);
@@ -642,6 +806,8 @@ namespace Graded_Unit
                         spriteBatch.DrawString(font, option_C.information2[current_hint], question_box.textposition2, Color.White);
                     }
 
+                    spriteBatch.DrawString(font, (lives.ToString() + " Lives"), new Vector2(displaywidth / 10 * 9, displayheight / 20), Color.White);
+
                 }
                 if (mode == "questions")
                 {
@@ -658,6 +824,8 @@ namespace Graded_Unit
 
                     spriteBatch.Draw(question_box.UI, question_box.rect, Color.White);
                     spriteBatch.DrawString(font, questions[current_question], question_box.textposition, Color.White);
+
+                    spriteBatch.DrawString(font, (lives.ToString() + " Lives"), new Vector2(displaywidth / 10 * 9, displayheight / 20), Color.White);
                 }
 
 
