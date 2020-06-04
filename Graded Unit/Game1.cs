@@ -57,7 +57,7 @@ namespace Graded_Unit
             public Rectangle rect;
             public float size;
             public BoundingBox bbox_interactable;
-
+            internal object position;
         }
 
         struct text_box
@@ -157,8 +157,8 @@ namespace Graded_Unit
             background.rect.X = 0;
             background.rect.Y = ((displayheight - background.rect.Height) / 2);
 
-            character.imageL = Content.Load<Texture2D>("PlayerL");
-            character.imageR = Content.Load<Texture2D>("PlayerR");
+            character.imageL = Content.Load<Texture2D>("PlayerSouthL");
+            character.imageR = Content.Load<Texture2D>("PlayerSouthR");
             character.rect.Height = displayheight / 10;
             character.rect.Width = displaywidth / 20;
 
@@ -170,7 +170,7 @@ namespace Graded_Unit
             book.rect.Height = book.imageobject.Height *(int) book.size;
             book.rect.X = displaywidth / 10 * 7;
             book.rect.Y = displayheight /12 * 11;
-            book.bbox_interactable.Min = new Vector3 (book.rect.X, book.rect.Y,0);
+            book.bbox_interactable.Min = new Vector3 (book.rect.X - book.imageobject.Width, book.rect.Y - book.imageobject.Height, 0);
             book.bbox_interactable.Max = new Vector3(book.rect.X + book.imageobject.Width, book.rect.Y + book.imageobject.Height, 0);
 
             camera.imageobject = Content.Load<Texture2D>("Camera");
@@ -179,8 +179,8 @@ namespace Graded_Unit
             camera.rect.Height = camera.imageobject.Height * (int)camera.size;
             camera.rect.X = displaywidth / 10 * 9;
             camera.rect.Y = displayheight / 2;
-            camera.bbox_interactable.Min = new Vector3(camera.rect.X, camera.rect.Y, 0);
-            camera.bbox_interactable.Max = new Vector3(camera.rect.X + camera.imageobject.Width, camera.rect.Y + camera.imageobject.Height, 0);
+            camera.bbox_interactable.Min = new Vector3(camera.rect.X - camera.imageobject.Width/2, camera.rect.Y - camera.imageobject.Height/2, 0);
+            camera.bbox_interactable.Max = new Vector3(camera.rect.X + camera.imageobject.Width/2, camera.rect.Y + camera.imageobject.Height/2, 0);
 
             crown.imageobject = Content.Load<Texture2D>("Crown");
             crown.size = 2;
@@ -188,7 +188,7 @@ namespace Graded_Unit
             crown.rect.Height = crown.imageobject.Height * (int)crown.size;
             crown.rect.X = displaywidth / 100 * 25;
             crown.rect.Y = displayheight / 12 * 11;
-            crown.bbox_interactable.Min = new Vector3(crown.rect.X, crown.rect.Y, 0);
+            crown.bbox_interactable.Min = new Vector3(crown.rect.X - crown.imageobject.Height, crown.rect.Y - crown.imageobject.Height, 0);
             crown.bbox_interactable.Max = new Vector3(crown.rect.X + crown.imageobject.Width, crown.rect.Y + crown.imageobject.Height, 0);
 
             knight.imageobject = Content.Load<Texture2D>("Knight");
@@ -197,8 +197,8 @@ namespace Graded_Unit
             knight.rect.Height = knight.imageobject.Height * (int)knight.size;
             knight.rect.X = displaywidth/100;
             knight.rect.Y = displayheight/5;
-            knight.bbox_interactable.Min = new Vector3(knight.rect.X, knight.rect.Y, 0);
-            knight.bbox_interactable.Max = new Vector3(knight.rect.X + knight.imageobject.Width, knight.rect.Y + knight.imageobject.Height, 0);
+            knight.bbox_interactable.Min = new Vector3(knight.rect.X - knight.imageobject.Width/2, knight.rect.Y - knight.imageobject.Height/2, 0);
+            knight.bbox_interactable.Max = new Vector3(knight.rect.X + knight.imageobject.Width/2, knight.rect.Y + knight.imageobject.Height/2, 0);
 
             musket.imageobject = Content.Load<Texture2D>("Musket");
             musket.size = 1;
@@ -206,8 +206,8 @@ namespace Graded_Unit
             musket.rect.Height = musket.imageobject.Height * (int)musket.size;
             musket.rect.X = displaywidth/10 * 9;
             musket.rect.Y = displayheight/2;
-            musket.bbox_interactable.Min = new Vector3(musket.rect.X, musket.rect.Y, 0);
-            musket.bbox_interactable.Max = new Vector3(musket.rect.X + musket.imageobject.Width, musket.rect.Y + musket.imageobject.Height, 0);
+            musket.bbox_interactable.Min = new Vector3(musket.rect.X - musket.imageobject.Width/2, musket.rect.Y - musket.imageobject.Height/2, 0);
+            musket.bbox_interactable.Max = new Vector3(musket.rect.X + musket.imageobject.Width/2, musket.rect.Y + musket.imageobject.Height/2, 0);
 
             sword.imageobject = Content.Load<Texture2D>("Sword");
             sword.size = 1;
@@ -215,8 +215,8 @@ namespace Graded_Unit
             sword.rect.Height = sword.imageobject.Height * (int)sword.size;
             sword.rect.X = displaywidth / 2;
             sword.rect.Y = displayheight / 2;
-            sword.bbox_interactable.Min = new Vector3(sword.rect.X, sword.rect.Y, 0);
-            sword.bbox_interactable.Max = new Vector3(sword.rect.X + sword.imageobject.Width, sword.rect.Y + sword.imageobject.Height, 0);
+            sword.bbox_interactable.Min = new Vector3(sword.rect.X - sword.imageobject.Width/2, sword.rect.Y - sword.imageobject.Height/2, 0);
+            sword.bbox_interactable.Max = new Vector3(sword.rect.X + sword.imageobject.Width/2, sword.rect.Y + sword.imageobject.Height/2, 0);
 
 
 
@@ -556,14 +556,38 @@ namespace Graded_Unit
                 if (mode == "Exploration")
                 {
                     //Movement and Bbox
+                    character.moving = false; //Sets up whether to track the movement loop
                     if (Keyboard.GetState().IsKeyDown(Keys.W)) { character.position.Y -= 5; character.direction = "up"; character.moving = true; }
-                    else if (Keyboard.GetState().IsKeyDown(Keys.S)) { character.position.Y += 5; character.direction = "down"; character.moving = true; }
-                    else if (Keyboard.GetState().IsKeyDown(Keys.A)) { character.position.X -= 5; character.direction = "left"; character.moving = true; }
-                    else if (Keyboard.GetState().IsKeyDown(Keys.D)) { character.position.X += 5; character.direction = "right"; character.moving = true; }
-                    else { character.moving = false; } //Sets up whether to track the movement loop
+                    if (Keyboard.GetState().IsKeyDown(Keys.S)) { character.position.Y += 5; character.direction = "down"; character.moving = true; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.A)) { character.position.X -= 5; character.direction = "left"; character.moving = true; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.D)) { character.position.X += 5; character.direction = "right"; character.moving = true; }
                     character.bbox.Min = character.position;
-                    character.bbox.Max = new Vector3 (character.position.X + displaywidth/20, character.position.Y + displayheight/2, 0);
+                    character.bbox.Max = new Vector3 (character.position.X + displaywidth/20, character.position.Y + displayheight/20, 0);
 
+
+                    if (character.direction == "up")
+                    {
+                        character.imageL = Content.Load<Texture2D>("PlayerNorthL");
+                        character.imageR = Content.Load<Texture2D>("PlayerNorthR");
+                    }
+
+                    if (character.direction == "down")
+                    {
+                        character.imageL = Content.Load<Texture2D>("PlayerSouthL");
+                        character.imageR = Content.Load<Texture2D>("PlayerSouthR");
+                    }
+
+                    if (character.direction == "left")
+                    {
+                        character.imageL = Content.Load<Texture2D>("PlayerWestL");
+                        character.imageR = Content.Load<Texture2D>("PlayerWestR");
+                    }
+
+                    if (character.direction == "right")
+                    {
+                        character.imageL = Content.Load<Texture2D>("PlayerEastL");
+                        character.imageR = Content.Load<Texture2D>("PlayerEastR");
+                    }
 
                     //collision. For some reason displaywidth and height were just slightly offscreen on my moniter hence the  - /20 because otherwise you could walk slightly offscreen
                     if (character.position.X > displaywidth - (displaywidth/20)) { character.position.X -= 5; }
@@ -717,12 +741,20 @@ namespace Graded_Unit
                         spriteBatch.Draw(background.stirling, background.rect, Color.White);
                         spriteBatch.Draw(knight.imageobject, knight.rect, Color.White);
                         spriteBatch.Draw(musket.imageobject, musket.rect, Color.White);
+                        if (character.bbox.Intersects(knight.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
+                        if (character.bbox.Intersects(musket.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
                     }
                     if (level == "Edinburgh")
                     {
                         spriteBatch.Draw(background.edinburgh, background.rect, Color.White);
                         spriteBatch.Draw(book.imageobject, book.rect, Color.White);
                         spriteBatch.Draw(crown.imageobject, crown.rect, Color.White);
+                        if (character.bbox.Intersects(book.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
+                        if (character.bbox.Intersects(crown.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
 
                     }
                     if (level == "Loch")
@@ -730,23 +762,28 @@ namespace Graded_Unit
                         spriteBatch.Draw(background.loch_ness, background.rect, Color.White);
                         spriteBatch.Draw(sword.imageobject, sword.rect, Color.White);
                         spriteBatch.Draw(camera.imageobject, camera.rect, Color.White);
+                        if (character.bbox.Intersects(sword.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
+                        if (character.bbox.Intersects(camera.bbox_interactable))
+                            spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
                     }
 
                     spriteBatch.DrawString(font, (lives.ToString() + " Lives"), new Vector2 (displaywidth/10 * 9, displayheight /20), Color.White);
                     if ((float)(gameTime.TotalGameTime.TotalSeconds) - timechosenwrong <= 5) // provide a hint message to tell the player where to look for information
                     { 
-                        if (current_question <= 2) { spriteBatch.DrawString(font, "That Knight looks interesting", question_box.textposition, Color.White); }
-                        if (current_question <= 4 && current_question >= 3) { spriteBatch.DrawString(font, "The Musket Display may have useful information", question_box.textposition, Color.White); }
-                        if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The book looks like a good read", question_box.textposition, Color.White); }
-                        if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", question_box.textposition, Color.White); }
-                        if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "Thats a really nice Sword", question_box.textposition, Color.White); }
-                        if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "That old camera may hold the answers", question_box.textposition, Color.White); }
+                        if (current_question <= 2) { spriteBatch.DrawString(font, "That Knight looks interesting", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 4 && current_question >= 3) { spriteBatch.DrawString(font, "The Musket Display may have useful information", new Vector2 ( displaywidth/2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The book looks like a good read", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "Thats a really nice Sword", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "That old camera may hold the answers", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
                     }
                     if (character.foot == "Left") { spriteBatch.Draw(character.imageL, character.rect, Color.White); } //draw the character
                     if (character.foot == "Right") { spriteBatch.Draw(character.imageR, character.rect, Color.White); }
                     
                     if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincecontrols <= 5) { spriteBatch.DrawString(font, "E for questions, Enter for information, WASD for movement, H for hints", new Vector2(displaywidth/20, displayheight *(float) 0.75), Color.White); }
-
+                    if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincecontrols >= 5)
+                        spriteBatch.DrawString(font, "Press C to see the controls" , new Vector2 (displaywidth/20, displayheight/10*8), Color.White);
                 }
 
 
@@ -780,6 +817,7 @@ namespace Graded_Unit
                     spriteBatch.DrawString(font, option_C.preview[current_hint], option_C.textposition, Color.White);
 
                     spriteBatch.Draw(question_box.UI, question_box.rect, Color.White);
+
 
                     //Drawing the right test within the information box
                     if (chosen == false)
