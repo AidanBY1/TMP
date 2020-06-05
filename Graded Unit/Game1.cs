@@ -388,36 +388,36 @@ namespace Graded_Unit
             correct_answers[9] = "A";
 
             //Loch Ness Questions
-            option_A.answer[10] = "Placeholder Loch";
-            option_B.answer[10] = "Placeholder Loch";
-            option_C.answer[10] = "Placeholder Loch";
-            questions[10] = "Placeholder Loch";
-            correct_answers[10] = "A";
+            option_A.answer[10] = "1943";
+            option_B.answer[10] = "1934";
+            option_C.answer[10] = "1936";
+            questions[10] = "What year was the “Surgeons Photograph” taken";
+            correct_answers[10] = "B";
 
 
-            option_A.answer[11] = "Placeholder Loch";
-            option_B.answer[11] = "Placeholder Loch";
-            option_C.answer[11] = "Placeholder Loch";
-            questions[11] = "Placeholder Loch";
-            correct_answers[11] = "A";
+            option_A.answer[11] = "Dodo";
+            option_B.answer[11] = "Brachiosaur";
+            option_C.answer[11] = "Plesiosaur";
+            questions[11] = "What extinct creature is Nessie typically depicted as? ";
+            correct_answers[11] = "C";
 
-            option_A.answer[12] = "Placeholder Loch";
-            option_B.answer[12] = "Placeholder Loch";
-            option_C.answer[12] = "Placeholder Loch";
-            questions[12] = "Placeholder Loch";
-            correct_answers[12] = "A";
+            option_A.answer[12] = "570";
+            option_B.answer[12] = "565";
+            option_C.answer[12] = "560";
+            questions[12] = "When was the earliest recorded sighting of Nessie?";
+            correct_answers[12] = "B";
 
-            option_A.answer[13] = "Placeholder Loch";
-            option_B.answer[13] = "Placeholder Loch";
-            option_C.answer[13] = "Placeholder Loch";
-            questions[13] = "Placeholder Loch";
+            option_A.answer[13] = "Carterhaugh";
+            option_B.answer[13] = "Abernethy";
+            option_C.answer[13] = "Inchcailloch";
+            questions[13] = "Where is the myth of Tam Lin set?";
             correct_answers[13] = "A";
 
-            option_A.answer[14] = "Placeholder Loch";
-            option_B.answer[14] = "Placeholder Loch";
-            option_C.answer[14] = "Placeholder Loch";
-            questions[14] = "Placeholder Loch";
-            correct_answers[14] = "A";
+            option_A.answer[14] = "Selkie";
+            option_B.answer[14] = "Felpie";
+            option_C.answer[14] = "Kelpie";
+            questions[14] = "What is a man who can turn into a horse called?";
+            correct_answers[14] = "C";
 
 
             //The infromation for all of the interactables
@@ -464,22 +464,22 @@ namespace Graded_Unit
             //Matthew put loch ness hints and information here. Preview is the hint message, Information 1 is the first line of information, Information 2 is the second
             //Try and keep them at the length i have above, more or less, because if its too long it wont fit on the screen.
 
-            option_A.preview[4] = "";
-            option_A.information1[4] = "";
-            option_A.information2[4] = "";
-            option_B.preview[4] = "";
-            option_B.information1[4] = "";
-            option_B.information2[4] = "";
-            option_C.preview[4] = "";
-            option_C.information1[4] = "";
-            option_C.information2[4] = "";
+            option_A.preview[4] = "Photos of Nessie";
+            option_A.information1[4] = "There are a great many photographs of Nessie";
+            option_A.information2[4] = "the most famous of which is the Surgeons Photograph taken in 1934";
+            option_B.preview[4] = "Nessie's Appearance";
+            option_B.information1[4] = "There are a number of theories about what Nessie's looks like";
+            option_B.information2[4] = "a popular theory is that Nessie is a plesiosaur";
+            option_C.preview[4] = "Early Sightings";
+            option_C.information1[4] = "The earliest recorded sighting of a monster living in loch ness";
+            option_C.information2[4] = "is an account by Saint Columba’s in 565";
 
-            option_A.preview[5] = "";
-            option_A.information1[5] = "";
-            option_A.information2[5] = "";
-            option_B.preview[5] = "";
-            option_B.information1[5] = "";
-            option_B.information2[5] = "";
+            option_A.preview[5] = "Tam Lin";
+            option_A.information1[5] = "The ballad of Tam Lin describes a romance between a fae";
+            option_A.information2[5] = "and a mortal in the woods of carterhaugh";
+            option_B.preview[5] = "Shapeshifters";
+            option_B.information1[5] = "There are several folk tales of shapeshifters in Scottish lore";
+            option_B.information2[5] = "such as the kelpies who could take the form of horses";
             option_C.preview[5] = "N/A";
             option_C.information1[5] = "What would you like to learn about?";
             option_C.information2[5] = "";
