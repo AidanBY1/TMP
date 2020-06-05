@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Graded_Unit
 {
@@ -118,6 +121,11 @@ namespace Graded_Unit
         int current_hint; //keeps track of which interactable is being used
         int track = 0;
 
+        private SoundEffect Wrong;
+        private SoundEffect Right;
+        private SoundEffect Button;
+        private SoundEffect Walking;
+
         //variables to be used in the exploration section
 
         /// <summary>
@@ -145,6 +153,11 @@ namespace Graded_Unit
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("Quartz4");
+
+            Wrong = Content.Load<SoundEffect>("buzzerWrong");
+            Right = Content.Load<SoundEffect>("rightSound");
+            Button = Content.Load<SoundEffect>("button");
+            Walking = Content.Load<SoundEffect>("walking");
 
             background.stirling = Content.Load<Texture2D>("StirlingFinal(32x18)");
             background.edinburgh = Content.Load<Texture2D>("Edinburgh Final(32x18)");
@@ -509,6 +522,7 @@ namespace Graded_Unit
             //Allow the player to go back to the level select at any time
             if (Keyboard.GetState().IsKeyDown(Keys.T))
             {
+                Button.Play();
                 mode = "level_select";
                 level_start();
             }
@@ -524,6 +538,7 @@ namespace Graded_Unit
 
                     if (option_A.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         level = "Stirling";
                         mode = "Exploration";
                         extra = 0;
@@ -533,6 +548,7 @@ namespace Graded_Unit
 
                     if (option_B.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         level = "Edinburgh";
                         mode = "Exploration";
                         extra = 5;
@@ -542,6 +558,7 @@ namespace Graded_Unit
 
                     if (option_C.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         level = "Loch";
                         mode = "Exploration";
                         extra = 10;
@@ -598,33 +615,34 @@ namespace Graded_Unit
                     //Sets up which interactables are present in each level and what information they give
                     if (level == "Stirling")
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(knight.bbox_interactable)) { mode = "hints"; current_hint = 0; chosen = false; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(musket.bbox_interactable)) { mode = "hints"; current_hint = 1; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(knight.bbox_interactable)) { mode = "hints"; current_hint = 0; chosen = false; Button.Play(); }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(musket.bbox_interactable)) { mode = "hints"; current_hint = 1; chosen = false; Button.Play(); }
                     }
 
                     if (level == "Edinburgh")
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(book.bbox_interactable)) { mode = "hints"; current_hint = 2; chosen = false; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(crown.bbox_interactable)) { mode = "hints"; current_hint = 3; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(book.bbox_interactable)) { mode = "hints"; current_hint = 2; chosen = false; Button.Play(); }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(crown.bbox_interactable)) { mode = "hints"; current_hint = 3; chosen = false; Button.Play(); }
                     }
 
                     if (level == "Loch")
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; }
-                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; Button.Play(); }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; Button.Play(); }
                     }
 
                     //Shortcuts to get different information
                     if (Keyboard.GetState().IsKeyDown(Keys.C)) { timesincecontrols = (float)gameTime.TotalGameTime.TotalSeconds; }
                     if (Keyboard.GetState().IsKeyDown(Keys.H)) { timechosenwrong = (float)gameTime.TotalGameTime.TotalSeconds; }
-                    if (Keyboard.GetState().IsKeyDown(Keys.E)) { mode = "questions"; chosen = false; }
+                    if (Keyboard.GetState().IsKeyDown(Keys.E)) { mode = "questions"; chosen = false; Button.Play(); }
 
                     //Movement loop. Swaps between 1 and 2, left and right
                     if (character.moving == true)
                     {
+                       
                         if (track == 0) { character.foot = "Right"; }
                         else if (track == 1) { character.foot = "Left"; }
-                        if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincestep >= 0.5) { track += 1; timesincestep = (float)gameTime.TotalGameTime.TotalSeconds; }
+                        if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincestep >= 0.5) { track += 1; timesincestep = (float)gameTime.TotalGameTime.TotalSeconds; Walking.Play(); }
                         if (track == 2) { track = 0; }
                     }
 
@@ -641,18 +659,21 @@ namespace Graded_Unit
                     //Sets up the question boxes to be pressed
                     if (option_A.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         chosen = true;
                         current_answer = "A";
                     }
 
                     if (option_B.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         chosen = true;
                         current_answer = "B";
                     }
 
                     if (option_C.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                     {
+                        Button.Play();
                         chosen = true;
                         current_answer = "C";
 
@@ -673,24 +694,35 @@ namespace Graded_Unit
                     {
                         if (option_A.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                         {
+                            
                             chosen = true;
                             current_answer = "A";
                         }
 
                         if (option_B.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                         {
+                            
                             chosen = true;
                             current_answer = "B";
                         }
 
                         if (option_C.rect.Contains(mousePoint) && mouseState.LeftButton == ButtonState.Pressed)
                         {
+                            
                             chosen = true;
                             current_answer = "C";
 
                         }
                     }
-                    //Right or Wrong Code
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+                    //Right or Wrong Code************************************************************************************************************************************************************************
+
                     if (chosen == true) //Only checks once you've chosen an answer
                     {
                         if (current_answer == correct_answers[current_question]) //If the answer is right move on to the next question
@@ -698,6 +730,7 @@ namespace Graded_Unit
                             current_question += 1;
                             score += 1;
                             chosen = false;
+                            Right.Play();
                             timechosen = (float)(gameTime.TotalGameTime.TotalSeconds); //Makes it so you cant accidentally click the wrong answer instantly after, theres a buffer to read the question
                         }
 
@@ -705,6 +738,7 @@ namespace Graded_Unit
                         {
                             lives -= 1;
                             chosen = false;
+                            Wrong.Play();
                             mode = "Exploration"; 
                             timechosenwrong = (float)(gameTime.TotalGameTime.TotalSeconds); //Once back in exploration it writes you a hint telling you where to look for information
                         }
@@ -738,6 +772,7 @@ namespace Graded_Unit
                     //draw each of the levels
                     if (level == "Stirling")
                     {
+                        
                         spriteBatch.Draw(background.stirling, background.rect, Color.White);
                         spriteBatch.Draw(knight.imageobject, knight.rect, Color.White);
                         spriteBatch.Draw(musket.imageobject, musket.rect, Color.White);
@@ -745,9 +780,11 @@ namespace Graded_Unit
                             spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
                         if (character.bbox.Intersects(musket.bbox_interactable))
                             spriteBatch.DrawString(font, "Press Enter to get Information", question_box.textposition, Color.White);
+                    
                     }
                     if (level == "Edinburgh")
                     {
+                        
                         spriteBatch.Draw(background.edinburgh, background.rect, Color.White);
                         spriteBatch.Draw(book.imageobject, book.rect, Color.White);
                         spriteBatch.Draw(crown.imageobject, crown.rect, Color.White);
@@ -759,6 +796,7 @@ namespace Graded_Unit
                     }
                     if (level == "Loch")
                     {
+                        
                         spriteBatch.Draw(background.loch_ness, background.rect, Color.White);
                         spriteBatch.Draw(sword.imageobject, sword.rect, Color.White);
                         spriteBatch.Draw(camera.imageobject, camera.rect, Color.White);
@@ -882,6 +920,14 @@ namespace Graded_Unit
                 }
             }
             spriteBatch.End();
+        }
+    }
+
+    internal class Soundeffect
+    {
+        internal void play()
+        {
+            throw new NotImplementedException();
         }
     }
 }
