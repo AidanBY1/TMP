@@ -33,6 +33,8 @@ namespace Graded_Unit
         {
             public Texture2D stirling;
             public Texture2D edinburgh;
+            public Texture2D win;
+            public Texture2D lose;
             public Texture2D loch_ness;
             public Rectangle rect;
 
@@ -121,6 +123,7 @@ namespace Graded_Unit
         int current_hint; //keeps track of which interactable is being used
         int track = 0;
 
+        //sound effects
         private SoundEffect Wrong;
         private SoundEffect Right;
         private SoundEffect Button;
@@ -162,6 +165,8 @@ namespace Graded_Unit
             background.stirling = Content.Load<Texture2D>("StirlingFinal(32x18)");
             background.edinburgh = Content.Load<Texture2D>("Edinburgh Final(32x18)");
             background.loch_ness = Content.Load<Texture2D>("Loch Ness Final(32x18)");
+            background.win = Content.Load<Texture2D>("Win");
+            background.lose = Content.Load<Texture2D>("Lose");
 
             float ratio = ((float)displaywidth / background.stirling.Width);
 
@@ -627,13 +632,13 @@ namespace Graded_Unit
 
                     if (level == "Loch")
                     {
-<<<<<<< HEAD
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; Button.Play(); }
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; Button.Play(); }
-=======
+
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; }
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; }
->>>>>>> f8701db236128e20e7fd48b463813bd18c9686fa
+
                     }
 
                     //Shortcuts to get different information
@@ -648,6 +653,7 @@ namespace Graded_Unit
                         if (track == 0) { character.foot = "Right"; }
                         else if (track == 1) { character.foot = "Left"; }
                         if ((float)(gameTime.TotalGameTime.TotalSeconds) - timesincestep >= 0.5) { track += 1; timesincestep = (float)gameTime.TotalGameTime.TotalSeconds; Walking.Play(); }
+                        
                         if (track == 2) { track = 0; }
                     }
 
@@ -752,7 +758,7 @@ namespace Graded_Unit
                 }
                 //Win or lose code
                 if (score >= 5) { gameover = true; win = true; }
-                if (lives == 0) { gameover = true; }
+                if (lives == 0) { gameover = true; win = false; }
             }
             base.Update(gameTime);
         }
@@ -916,12 +922,14 @@ namespace Graded_Unit
             {
                 if (win == true)
                 {
-                    spriteBatch.DrawString(font, "Congrats, you win, press T to return to the level select", option_B.textposition, Color.White);
+                    spriteBatch.Draw(background.win, background.rect, Color.White);
+                    spriteBatch.DrawString(font, "Congrats, you win, press T to return to the level select", question_box.textposition, Color.White);
                 }
 
                 if (win == false)
                 {
-                    spriteBatch.DrawString(font, "Sorry, you lost, press T to return to the level select", option_B.textposition, Color.White);
+                    spriteBatch.Draw(background.lose, background.rect, Color.White);
+                    spriteBatch.DrawString(font, "Sorry, you lost, press T to return to the level select", question_box.textposition, Color.White);
                 }
             }
             spriteBatch.End();

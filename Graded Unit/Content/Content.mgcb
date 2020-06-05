@@ -97,6 +97,18 @@
 /processorParam:TextureFormat=Color
 /build:Loch Ness Final(32x18).png
 
+#begin Lose.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Lose.jpg
+
 #begin Musket.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -272,4 +284,16 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:walking.wav
+
+#begin Win.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Win.jpg
 
