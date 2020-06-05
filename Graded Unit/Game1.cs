@@ -201,7 +201,7 @@ namespace Graded_Unit
             crown.rect.Height = crown.imageobject.Height * (int)crown.size;
             crown.rect.X = displaywidth / 100 * 25;
             crown.rect.Y = displayheight / 12 * 11;
-            crown.bbox_interactable.Min = new Vector3(crown.rect.X - crown.imageobject.Height, crown.rect.Y - crown.imageobject.Height, 0);
+            crown.bbox_interactable.Min = new Vector3(crown.rect.X, crown.rect.Y - crown.imageobject.Height, 0);
             crown.bbox_interactable.Max = new Vector3(crown.rect.X + crown.imageobject.Width, crown.rect.Y + crown.imageobject.Height, 0);
 
             knight.imageobject = Content.Load<Texture2D>("Knight");
@@ -226,8 +226,8 @@ namespace Graded_Unit
             sword.size = 1;
             sword.rect.Width = sword.imageobject.Width * (int)sword.size;
             sword.rect.Height = sword.imageobject.Height * (int)sword.size;
-            sword.rect.X = displaywidth / 2;
-            sword.rect.Y = displayheight / 2;
+            sword.rect.X = displaywidth / 10*1;
+            sword.rect.Y = displayheight / 10 * 2;
             sword.bbox_interactable.Min = new Vector3(sword.rect.X - sword.imageobject.Width/2, sword.rect.Y - sword.imageobject.Height/2, 0);
             sword.bbox_interactable.Max = new Vector3(sword.rect.X + sword.imageobject.Width/2, sword.rect.Y + sword.imageobject.Height/2, 0);
 
@@ -485,7 +485,7 @@ namespace Graded_Unit
             option_B.information2[4] = "a popular theory is that Nessie is a plesiosaur";
             option_C.preview[4] = "Early Sightings";
             option_C.information1[4] = "The earliest recorded sighting of a monster living in loch ness";
-            option_C.information2[4] = "is an account by Saint Columba’s in 565";
+            option_C.information2[4] = "Is an account by Saint Columbas in 565";
 
             option_A.preview[5] = "Tam Lin";
             option_A.information1[5] = "The ballad of Tam Lin describes a romance between a fae";
@@ -627,8 +627,13 @@ namespace Graded_Unit
 
                     if (level == "Loch")
                     {
+<<<<<<< HEAD
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; Button.Play(); }
                         if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; Button.Play(); }
+=======
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(sword.bbox_interactable)) { mode = "hints"; current_hint = 5; chosen = false; }
+                        if (Keyboard.GetState().IsKeyDown(Keys.Enter) && character.bbox.Intersects(camera.bbox_interactable)) { mode = "hints"; current_hint = 4; chosen = false; }
+>>>>>>> f8701db236128e20e7fd48b463813bd18c9686fa
                     }
 
                     //Shortcuts to get different information
@@ -813,8 +818,8 @@ namespace Graded_Unit
                         if (current_question <= 4 && current_question >= 3) { spriteBatch.DrawString(font, "The Musket Display may have useful information", new Vector2 ( displaywidth/2, question_box.textposition.Y), Color.White); }
                         if (current_question <= 7 && current_question >= 5) { spriteBatch.DrawString(font, "The book looks like a good read", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
                         if (current_question <= 9 && current_question >= 8) { spriteBatch.DrawString(font, "The Display by the crown has some useful information", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
-                        if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "Thats a really nice Sword", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
-                        if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "That old camera may hold the answers", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 12 && current_question >= 10) { spriteBatch.DrawString(font, "That old camera may hold the answers", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
+                        if (current_question <= 14 && current_question >= 13) { spriteBatch.DrawString(font, "Thats a really nice Sword", new Vector2(displaywidth / 2, question_box.textposition.Y), Color.White); }
                     }
                     if (character.foot == "Left") { spriteBatch.Draw(character.imageL, character.rect, Color.White); } //draw the character
                     if (character.foot == "Right") { spriteBatch.Draw(character.imageR, character.rect, Color.White); }
